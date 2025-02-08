@@ -9,7 +9,10 @@ import {
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { JwtService } from '@nestjs/jwt';
 
-import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 
 import { CreateUserDto } from '../user/dto/create-auth.dto';
 import { PrismaService } from 'src/common/prisma/prisma.service';

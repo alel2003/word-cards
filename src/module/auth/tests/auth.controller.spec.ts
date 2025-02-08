@@ -1,9 +1,16 @@
 import { Test } from '@nestjs/testing';
-import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
-import { REFRESH_TOKEN_RESULT, SIGN_IN_RESULT, SIGN_UP_RESULT } from 'src/common/tests/constants/auth';
+import {
+  REFRESH_TOKEN_RESULT,
+  SIGN_IN_RESULT,
+  SIGN_UP_RESULT,
+} from 'src/common/tests/constants/auth';
 import { BASEUSER, REGISTERUSER } from 'src/common/tests/constants/user';
 import { mockCookieResponse } from 'src/common/tests/utils';
 
@@ -30,20 +37,18 @@ describe('AuthController', () => {
 
   const mockLocalAuthGuard = {
     canActivate: jest.fn().mockImplementation((context) => true),
-  }
+  };
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [
-        { provide: AuthService, useValue: mockAuthService },
-      ],
+      providers: [{ provide: AuthService, useValue: mockAuthService }],
     })
-    .overrideGuard(AuthGuard('local'))
-    .useValue(mockLocalAuthGuard) 
-    .overrideGuard(AuthGuard('jwt-refresh'))
-    .useValue(mockJwtRefreshGuard) 
-    .compile();
+      .overrideGuard(AuthGuard('local'))
+      .useValue(mockLocalAuthGuard)
+      .overrideGuard(AuthGuard('jwt-refresh'))
+      .useValue(mockJwtRefreshGuard)
+      .compile();
 
     authController = moduleRef.get<AuthController>(AuthController);
     authService = moduleRef.get<AuthService>(AuthService);
@@ -59,24 +64,20 @@ describe('AuthController', () => {
         REGISTERUSER,
         mockCookieResponse,
       );
-      
+
       expect(result).toEqual(SIGN_UP_RESULT);
-      expect(
-        authService.signUp,
-      ).toHaveBeenCalledTimes(1);
+      expect(authService.signUp).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('sign-in', () => {
     it('should return a success message on sign-in', async () => {
       const result = await authController.login(BASEUSER, mockCookieResponse);
-      await mockLocalAuthGuard.canActivate({} as any)
-      
+      await mockLocalAuthGuard.canActivate({} as any);
+
       expect(mockLocalAuthGuard.canActivate).toHaveBeenCalledTimes(1);
       expect(result).toEqual(SIGN_IN_RESULT);
-      expect(
-        authService.signIn,
-      ).toHaveBeenCalledTimes(1);
+      expect(authService.signIn).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -90,9 +91,8 @@ describe('AuthController', () => {
 
       expect(mockJwtRefreshGuard.canActivate).toHaveBeenCalledTimes(1);
       expect(result).toEqual(REFRESH_TOKEN_RESULT);
-      
-      expect(
-        authService.refreshToken).toHaveBeenCalledTimes(1);
+
+      expect(authService.refreshToken).toHaveBeenCalledTimes(1);
     });
   });
 });

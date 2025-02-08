@@ -1,10 +1,18 @@
-import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 import { Test } from '@nestjs/testing';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { UserService } from 'src/module/user/user.service';
 import { USER_ID } from 'src/common/tests/constants/card';
 import { AuthService } from 'src/module/auth/auth.service';
-import { BASEUSER, DELETE_RES, REGISTERUSER, UPDATE_USER } from 'src/common/tests/constants/user';
+import {
+  BASEUSER,
+  DELETE_RES,
+  REGISTERUSER,
+  UPDATE_USER,
+} from 'src/common/tests/constants/user';
 import { ACCESSTOKEN, ACCESSTOKENKEY } from 'src/common/tests/constants/auth';
 import { mockCookieResponse, mockRequest } from 'src/common/tests/utils';
 
@@ -22,7 +30,7 @@ describe('UserService', () => {
 
   const mockAuthService = {
     getTokenCookieId: jest.fn().mockReturnValue(USER_ID),
-    hashedPassword: jest.fn().mockResolvedValue(UPDATE_USER.password)
+    hashedPassword: jest.fn().mockResolvedValue(UPDATE_USER.password),
   };
 
   const mockRedisClient = {
@@ -35,7 +43,10 @@ describe('UserService', () => {
         UserService,
         { provide: PrismaService, useValue: mockPrismaServise },
         { provide: AuthService, useValue: mockAuthService },
-        { provide: 'default_IORedisModuleConnectionToken', useValue: mockRedisClient },
+        {
+          provide: 'default_IORedisModuleConnectionToken',
+          useValue: mockRedisClient,
+        },
       ],
     }).compile();
 
@@ -47,7 +58,10 @@ describe('UserService', () => {
   });
 
   it('should create a new user', async () => {
-    const result = await userService.create(REGISTERUSER.email, REGISTERUSER.password);
+    const result = await userService.create(
+      REGISTERUSER.email,
+      REGISTERUSER.password,
+    );
 
     expect(result).toEqual(BASEUSER);
 
@@ -61,22 +75,26 @@ describe('UserService', () => {
       const userExists = await userService.findById(USER_ID);
       const result = await userService.update(mockRequest, UPDATE_USER);
 
-      expect(userExists).toEqual(BASEUSER)
+      expect(userExists).toEqual(BASEUSER);
       expect(result).toEqual(UPDATE_USER);
-      expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(mockRequest);
+      expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(
+        mockRequest,
+      );
 
       expect(mockPrismaServise.user.update).toHaveBeenCalledWith({
         where: { id: USER_ID },
         data: {
           email: UPDATE_USER.email,
-          password: UPDATE_USER.password
+          password: UPDATE_USER.password,
         },
         select: {
           id: true,
           email: true,
         },
       });
-      expect(mockAuthService.hashedPassword).toHaveBeenCalledWith(UPDATE_USER.password)
+      expect(mockAuthService.hashedPassword).toHaveBeenCalledWith(
+        UPDATE_USER.password,
+      );
     });
   });
 
@@ -84,22 +102,24 @@ describe('UserService', () => {
     it('should delete a user', async () => {
       const userExists = await userService.findById(USER_ID);
       const result = await userService.remove(mockRequest, mockCookieResponse);
-      
+
       expect(userExists).toEqual(BASEUSER);
       expect(result).toEqual(DELETE_RES);
-      expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(mockRequest);
+      expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(
+        mockRequest,
+      );
 
       expect(mockPrismaServise.user.delete).toHaveBeenCalledWith({
         where: {
-          id: USER_ID
+          id: USER_ID,
         },
       });
 
-      expect(
-        mockCookieResponse.clearCookie
-      ).toHaveBeenCalledWith(ACCESSTOKENKEY);
+      expect(mockCookieResponse.clearCookie).toHaveBeenCalledWith(
+        ACCESSTOKENKEY,
+      );
 
-      expect(mockRedisClient.del).toHaveBeenCalledWith(`user:${USER_ID}`)
+      expect(mockRedisClient.del).toHaveBeenCalledWith(`user:${USER_ID}`);
     });
   });
 });

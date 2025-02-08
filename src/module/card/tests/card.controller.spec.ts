@@ -3,7 +3,11 @@ import { Test } from '@nestjs/testing';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { CardController } from 'src/module/card/card.controller';
 import { CardService } from 'src/module/card/card.service';
-import { BASE_WORD_CARD, PAGINATION_SETTING, UPDATE_WORD_CARD, } from 'src/common/tests/constants/card';
+import {
+  BASE_WORD_CARD,
+  PAGINATION_SETTING,
+  UPDATE_WORD_CARD,
+} from 'src/common/tests/constants/card';
 import { mockJwtGuard, mockRequest } from 'src/common/tests/utils';
 
 describe('CardController', () => {
@@ -41,22 +45,20 @@ describe('CardController', () => {
         PAGINATION_SETTING,
         mockRequest,
       );
-      mockJwtGuard.canActivate({} as any)
+      mockJwtGuard.canActivate({} as any);
 
-      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1)
+      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1);
       expect(result).toEqual([BASE_WORD_CARD]);
-      expect(
-        cardService.findAll,
-      ).toHaveBeenCalledTimes(1);
+      expect(cardService.findAll).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('findOne', () => {
     it('should return a single card', async () => {
       const result = await cardController.findOne(mockRequest, 1);
-      mockJwtGuard.canActivate({} as any)
+      mockJwtGuard.canActivate({} as any);
 
-      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1)
+      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1);
       expect(result).toEqual(BASE_WORD_CARD);
       expect(cardService.findOne).toHaveBeenCalledWith(mockRequest, 1);
     });
@@ -65,13 +67,14 @@ describe('CardController', () => {
   describe('create', () => {
     it('should create a new card', async () => {
       const result = await cardController.create(mockRequest, BASE_WORD_CARD);
-      mockJwtGuard.canActivate({} as any)
+      mockJwtGuard.canActivate({} as any);
 
-      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1)
+      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1);
       expect(result).toEqual(BASE_WORD_CARD);
-      expect(
-        cardService.create,
-      ).toHaveBeenCalledWith(mockRequest, BASE_WORD_CARD);
+      expect(cardService.create).toHaveBeenCalledWith(
+        mockRequest,
+        BASE_WORD_CARD,
+      );
     });
   });
 
@@ -82,27 +85,26 @@ describe('CardController', () => {
         1,
         UPDATE_WORD_CARD,
       );
-      mockJwtGuard.canActivate({} as any)
+      mockJwtGuard.canActivate({} as any);
 
-      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1)
+      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1);
       expect(result).toEqual(UPDATE_WORD_CARD);
-      expect(
-        cardService.update,
-      ).toHaveBeenCalledWith(mockRequest, 1, UPDATE_WORD_CARD);
+      expect(cardService.update).toHaveBeenCalledWith(
+        mockRequest,
+        1,
+        UPDATE_WORD_CARD,
+      );
     });
   });
 
   describe('remove', () => {
     it('should delete a card', async () => {
       const result = await cardController.remove(mockRequest, 1);
-      mockJwtGuard.canActivate({} as any)
+      mockJwtGuard.canActivate({} as any);
 
-      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1)
+      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1);
       expect(result).toEqual(BASE_WORD_CARD);
-      expect(cardService.remove).toHaveBeenCalledWith(
-        mockRequest,
-        1,
-      );
+      expect(cardService.remove).toHaveBeenCalledWith(mockRequest, 1);
     });
   });
 });

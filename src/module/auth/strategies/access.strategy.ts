@@ -28,7 +28,7 @@ export class AccessStrategy extends PassportStrategy(Strategy) {
     const user = await this.UserService.findById(sub);
 
     if (!user) {
-      throw new UnauthorizedException('User not found or invalid token')
+      throw new UnauthorizedException('User not found or invalid token');
     }
 
     return {

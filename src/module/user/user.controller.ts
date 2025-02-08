@@ -8,7 +8,10 @@ import {
   Res,
   HttpStatus,
 } from '@nestjs/common';
-import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from 'src/common/guards/jwt.guard';
@@ -60,7 +63,10 @@ export class UserController {
 
   // delete
   @Delete('delete')
-  remove(@Req() req: ExpressRequest, @Res({ passthrough: true }) res: ExpressResponse) {
+  remove(
+    @Req() req: ExpressRequest,
+    @Res({ passthrough: true }) res: ExpressResponse,
+  ) {
     return this.userService.remove(req, res);
   }
 }

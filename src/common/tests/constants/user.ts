@@ -15,9 +15,9 @@ export const REGISTERUSER = {
 export const UPDATE_USER = {
   email: 'update_test@gmail.com',
   password: bcrypt.hashSync('update_password', 10),
-}
+};
 export const USERID = 1;
 
-export const USER_RES = { id: 1, email: 'test@gmail.com'}
-export const UPDATE_RES = { id: 1, email: 'test@gmail.com',}
+export const USER_RES = { id: 1, email: 'test@gmail.com' };
+export const UPDATE_RES = { id: 1, email: 'test@gmail.com' };
 export const DELETE_RES = { message: 'Deleted successfully !' };

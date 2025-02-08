@@ -3,7 +3,12 @@ import { Test } from '@nestjs/testing';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CardService } from 'src/module/card/card.service';
 import { AuthService } from 'src/module/auth/auth.service';
-import { BASE_WORD_CARD,  PAGINATION_SETTING, UPDATE_WORD_CARD, USER_ID, } from 'src/common/tests/constants/card';
+import {
+  BASE_WORD_CARD,
+  PAGINATION_SETTING,
+  UPDATE_WORD_CARD,
+  USER_ID,
+} from 'src/common/tests/constants/card';
 import { mockRequest } from 'src/common/tests/utils';
 
 describe('CardService', () => {
@@ -19,7 +24,7 @@ describe('CardService', () => {
   };
 
   const mockAuthService = {
-    getTokenCookieId: jest.fn().mockReturnValue(USER_ID)
+    getTokenCookieId: jest.fn().mockReturnValue(USER_ID),
   };
 
   beforeEach(async () => {
@@ -27,7 +32,7 @@ describe('CardService', () => {
       providers: [
         CardService,
         { provide: PrismaService, useValue: mockPrismaServise },
-        { provide: AuthService, useValue: mockAuthService }
+        { provide: AuthService, useValue: mockAuthService },
       ],
     }).compile();
 
@@ -40,7 +45,7 @@ describe('CardService', () => {
 
   it('should return an array of cards', async () => {
     const result = await cardService.findAll(PAGINATION_SETTING, mockRequest);
-    
+
     expect(result).toEqual([BASE_WORD_CARD]);
     expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(mockRequest);
 
@@ -65,11 +70,11 @@ describe('CardService', () => {
 
   it('should create a new card', async () => {
     const result = await cardService.create(mockRequest, BASE_WORD_CARD);
-    const {word, translation, userId, isDelete, examples} = BASE_WORD_CARD;
+    const { word, translation, userId, isDelete, examples } = BASE_WORD_CARD;
 
     expect(result).toEqual(BASE_WORD_CARD);
     expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(mockRequest);
-    
+
     expect(mockPrismaServise.wordCard.create).toHaveBeenCalledWith({
       data: {
         word,
@@ -77,8 +82,8 @@ describe('CardService', () => {
         userId,
         isDelete,
         examples: {
-          create: examples
-        }
+          create: examples,
+        },
       },
       include: { examples: true },
     });
@@ -86,17 +91,19 @@ describe('CardService', () => {
 
   describe('update', () => {
     it('should update a card', async () => {
-      const {word, translation, examples} = UPDATE_WORD_CARD;
+      const { word, translation, examples } = UPDATE_WORD_CARD;
 
       mockPrismaServise.wordCard.update.mockResolvedValue(UPDATE_WORD_CARD);
-      
+
       const result = await cardService.update(
         mockRequest,
         BASE_WORD_CARD.id,
         UPDATE_WORD_CARD,
       );
       expect(result).toEqual(UPDATE_WORD_CARD);
-      expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(mockRequest);
+      expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(
+        mockRequest,
+      );
 
       expect(mockPrismaServise.wordCard.update).toHaveBeenCalledWith({
         where: { id: BASE_WORD_CARD.id, userId: USER_ID },
@@ -104,11 +111,11 @@ describe('CardService', () => {
           word,
           translation,
           examples: {
-            deleteMany: { wordCardId: BASE_WORD_CARD.id }, 
-            create: examples, 
+            deleteMany: { wordCardId: BASE_WORD_CARD.id },
+            create: examples,
           },
         },
-        include: { examples: true }
+        include: { examples: true },
       });
     });
   });
@@ -120,12 +127,14 @@ describe('CardService', () => {
       const result = await cardService.remove(mockRequest, BASE_WORD_CARD.id);
 
       expect(result).toEqual(BASE_WORD_CARD);
-      expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(mockRequest);
+      expect(mockAuthService.getTokenCookieId).toHaveBeenCalledWith(
+        mockRequest,
+      );
 
       expect(mockPrismaServise.wordCard.update).toHaveBeenCalledWith({
         where: { id: BASE_WORD_CARD.id, userId: USER_ID },
         data: {
-          isDelete: true, 
+          isDelete: true,
         },
       });
     });

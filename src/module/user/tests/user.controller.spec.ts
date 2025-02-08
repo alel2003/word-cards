@@ -1,10 +1,21 @@
-import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 import { Test } from '@nestjs/testing';
 import { JwtGuard } from 'src/common/guards/jwt.guard';
 import { UserController } from 'src/module/user/user.controller';
 import { UserService } from 'src/module/user/user.service';
-import { BASEUSER, DELETE_RES, UPDATE_RES } from 'src/common/tests/constants/user';
-import { mockCookieResponse, mockJwtGuard, mockRequest } from 'src/common/tests/utils';
+import {
+  BASEUSER,
+  DELETE_RES,
+  UPDATE_RES,
+} from 'src/common/tests/constants/user';
+import {
+  mockCookieResponse,
+  mockJwtGuard,
+  mockRequest,
+} from 'src/common/tests/utils';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -35,14 +46,11 @@ describe('UserController', () => {
   describe('update', () => {
     it('should update a card', async () => {
       const result = await userController.update(mockRequest, BASEUSER);
-      mockJwtGuard.canActivate({} as any)
+      mockJwtGuard.canActivate({} as any);
 
-      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1)
+      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1);
       expect(result).toEqual(UPDATE_RES);
-      expect(userService.update).toHaveBeenCalledWith(
-        mockRequest,
-        BASEUSER,
-      );
+      expect(userService.update).toHaveBeenCalledWith(mockRequest, BASEUSER);
     });
   });
 
@@ -52,13 +60,14 @@ describe('UserController', () => {
         mockRequest,
         mockCookieResponse,
       );
-      mockJwtGuard.canActivate({} as any)
+      mockJwtGuard.canActivate({} as any);
 
-      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1)
+      expect(mockJwtGuard.canActivate).toHaveBeenCalledTimes(1);
       expect(result).toEqual(DELETE_RES);
-      expect(
-        userService.remove,
-      ).toHaveBeenCalledWith(mockRequest, mockCookieResponse);
+      expect(userService.remove).toHaveBeenCalledWith(
+        mockRequest,
+        mockCookieResponse,
+      );
     });
   });
 });

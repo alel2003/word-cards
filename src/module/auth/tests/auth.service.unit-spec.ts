@@ -3,9 +3,23 @@ import { Test } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
 import { UserService } from 'src/module/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { ACCESSTOKEN, ACCESSTOKENKEY, REFRESHTOKEN, STOREREDISREFRESHTOKEN } from 'src/common/tests/constants/auth';
-import { BASEUSER, REGISTERUSER, USER_RES, USERID } from 'src/common/tests/constants/user';
-import { expectSetCookie, mockCookieResponse, mockRedisClient } from 'src/common/tests/utils';
+import {
+  ACCESSTOKEN,
+  ACCESSTOKENKEY,
+  REFRESHTOKEN,
+  STOREREDISREFRESHTOKEN,
+} from 'src/common/tests/constants/auth';
+import {
+  BASEUSER,
+  REGISTERUSER,
+  USER_RES,
+  USERID,
+} from 'src/common/tests/constants/user';
+import {
+  expectSetCookie,
+  mockCookieResponse,
+  mockRedisClient,
+} from 'src/common/tests/utils';
 
 describe('AuthService (Unit Test)', () => {
   let authService: AuthService;
@@ -19,7 +33,10 @@ describe('AuthService (Unit Test)', () => {
       providers: [
         AuthService,
         { provide: JwtService, useValue: mockJwtService },
-        { provide: 'default_IORedisModuleConnectionToken', useValue: mockRedisClient },
+        {
+          provide: 'default_IORedisModuleConnectionToken',
+          useValue: mockRedisClient,
+        },
       ],
     }).compile();
 
@@ -31,7 +48,10 @@ describe('AuthService (Unit Test)', () => {
   });
 
   it('should validate a user with correct credentials', async () => {
-    const result = await authService.validateUser(BASEUSER.email, BASEUSER.password);
+    const result = await authService.validateUser(
+      BASEUSER.email,
+      BASEUSER.password,
+    );
     expect(result).toEqual(USER_RES);
   });
 

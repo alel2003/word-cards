@@ -1,5 +1,8 @@
 import Redis from 'ioredis';
-import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { InjectRedis } from '@nestjs-modules/ioredis';
@@ -46,15 +49,18 @@ export class UserService {
     });
   }
 
-  async update(req: ExpressRequest, dto: UpdateUserDto): Promise<UserResponseDto> {
+  async update(
+    req: ExpressRequest,
+    dto: UpdateUserDto,
+  ): Promise<UserResponseDto> {
     const id = this.authService.getTokenCookieId(req);
 
     const userExists = await this.findById(id);
     notFoundException(!userExists, `User with ID ${id} not found`);
 
-    const password = dto.password 
-    ? await this.authService.hashedPassword(dto.password)
-    : undefined;
+    const password = dto.password
+      ? await this.authService.hashedPassword(dto.password)
+      : undefined;
 
     return this.prisma.user.update({
       where: {
@@ -71,7 +77,10 @@ export class UserService {
     });
   }
 
-  async remove(req: ExpressRequest, res: ExpressResponse): Promise<{ message: string }> {
+  async remove(
+    req: ExpressRequest,
+    res: ExpressResponse,
+  ): Promise<{ message: string }> {
     const id = this.authService.getTokenCookieId(req);
 
     const userExists = await this.findById(id);
@@ -88,6 +97,6 @@ export class UserService {
 
     res.clearCookie('accessToken');
 
-   return { message: 'Deleted successfully !' };
+    return { message: 'Deleted successfully !' };
   }
 }

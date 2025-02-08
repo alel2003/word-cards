@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@user": ["src/module/user"],
+      "@user/*": ["src/module/user/*"],
+      "@auth": ["src/auth"],
+      "@auth/*": ["src/auth/*"],
+      "@card": ["src/module/card"],
+      "@card/*": ["src/module/card/*"],
+      "@guards": ["src/common/guards"],
+      "@guards/*": ["src/common/guards/*"],
+      "@decorators": ["src/auth/decorators"],
+      "@decorators/*": ["src/auth/decorators/*"]
+    },
+    "typeRoots": ["./node_modules/@types","src/common/types"]
+  }
+}

@@ -30,7 +30,7 @@ Follow these steps to set up and run the Word-Cards on your local machine.
 Start by cloning the repository:
 
 ```bash
-git clone https://github.com/alel2003/word-cards
+git clone https://github.com/alel2003/word-cards.git
 cd word-cards
 ```
 
